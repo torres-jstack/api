@@ -1,0 +1,12 @@
+{
+  "name": "mycontacts",
+  "version": "1.0.0",
+  "description": "mycontacts api",
+  "main": "src/index.js",
+  "repository": "https://github.com/torresluizg/api_mycontacts.git",
+  "author": "Luiz Torres",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
