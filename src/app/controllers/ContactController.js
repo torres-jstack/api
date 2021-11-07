@@ -26,7 +26,7 @@ class ContactController {
     if (contactExisists) {
       console.log(`Entrei aqui, hein: ${contactExisists}`);
 
-      return res.status(400).json({ error: 'This email is already been taken' });
+      return res.status(400).json({ error: 'This email is already in use' });
     }
     const contact = await ContactRepository.create({
       name, email, phone, category_id,
@@ -34,8 +34,30 @@ class ContactController {
     res.json(contact);
   }
 
-  update() {
-    // Editar um registro
+  async update(req, res) {
+    const { id } = req.params;
+    const {
+      name, email, phone, category_id,
+    } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ error: 'Name is required' });
+    }
+
+    const contactIdExisists = await ContactRepository.findById(id);
+    if (!contactIdExisists) {
+      return res.status(404).json({ error: "Contact don't exists" });
+    }
+    const contactEmailExisists = await ContactRepository.findByEmail(email);
+    if (contactEmailExisists && contactEmailExisists.id !== id) {
+      return res.status(400).json({ error: 'This email is already in use' });
+    }
+
+    const contact = await ContactRepository.update(id, {
+      name, email, phone, category_id,
+    });
+
+    res.json(contact);
   }
 
   async delete(req, res) {
