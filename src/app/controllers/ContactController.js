@@ -2,7 +2,8 @@ const ContactRepository = require('../repositories/ContactRepository');
 
 class ContactController {
   async index(req, res) {
-    const contacts = await ContactRepository.findAll();
+    const { orderBy } = req.query;
+    const contacts = await ContactRepository.findAll(orderBy);
     res.json(contacts);
   }
 
@@ -24,8 +25,6 @@ class ContactController {
     }
     const contactExisists = await ContactRepository.findByEmail(email);
     if (contactExisists) {
-      console.log(`Entrei aqui, hein: ${contactExisists}`);
-
       return res.status(400).json({ error: 'This email is already in use' });
     }
     const contact = await ContactRepository.create({
